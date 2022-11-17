@@ -7,6 +7,7 @@ import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.file.DefaultFileNameGenerator;
 import org.springframework.integration.file.FileReadingMessageSource;
 import org.springframework.integration.file.FileWritingMessageHandler;
+import org.springframework.integration.file.support.FileExistsMode;
 
 import java.io.File;
 
@@ -43,15 +44,22 @@ public class Configuration {
         File directory = new File("data/output");
         FileWritingMessageHandler handler = new FileWritingMessageHandler(directory);
         handler.setExpectReply(false);
+        handler.setFileExistsMode(FileExistsMode.REPLACE);
+        handler.setFileNameGenerator(generator());
 
         return handler;
     }
 
- /*   @Bean
+   /* @Bean
     public DefaultFileNameGenerator defaultFileNameGenerator() {
         DefaultFileNameGenerator defaultFileNameGenerator = new DefaultFileNameGenerator();
-        defaultFileNameGenerator.setHeaderName("");
+        defaultFileNameGenerator.setHeaderName("abc");
         //defaultFileNameGenerator.setExpression("headers['id']");
         return defaultFileNameGenerator;
     }*/
+
+    @Bean
+    public NewFileGenerator generator() {
+        return new NewFileGenerator();
+    }
 }
